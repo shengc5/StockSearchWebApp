@@ -1,0 +1,20 @@
+{
+  "name": "stock-app",
+  "version": "1.0.0",
+  "description": "my stock app for CSCI571",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Lucas Chen",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "moment-timezone": "^0.5.14",
+    "request": "^2.83.0",
+    "xml2js": "^0.4.19"
+  }
+}

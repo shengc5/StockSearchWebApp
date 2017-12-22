@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+	<head>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        
+<!--        <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
+		<script src="https://code.highcharts.com/stock/highstock.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<!-- Latest compiled JavaScript -->
+<!--
+        
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.1.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.1.0/js/bootstrap-toggle.min.js"></script>
+-->
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+        
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="/scripts.js" type="text/javascript"> </script> 
+		<style>
+
+			
+			body {
+                background-image: url("http://cs-server.usc.edu:45678/hw/hw8/images/background.png");
+
+			}
+			#searchArea {
+			background-color: white;
+			border-radius: 6px;
+			}
+			#searchBar {
+			margin-left:2%;
+			}
+			#tickerSymbol {
+                
+			}
+			#promptText {
+			display:none;
+			}
+			.container {
+			}
+/*
+			#test {
+			background-color: white;
+			width:80%;
+			margin-left:10%;
+			}
+*/
+			#tableBody {
+			display: table;
+			align-self: left;
+			font-family: sans-serif;
+			}
+			#infoPanels {
+			background-color: white;
+			border-radius: 6px;
+			}
+			#sotckDetailUl li {
+			cursor: pointer; 
+			}
+            .left.ng-hide-add {
+                
+            }
+            .left.ng-hide-add.ng-hide-add-active {
+               
+            }  
+            .left.ng-hide-remove {
+                transition: all ease-in-out 0.8s;
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            .left.ng-hide-remove.ng-hide-remove-active {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            .right.ng-hide-add {
+                
+            }
+            .right.ng-hide-add.ng-hide-add-active {
+                
+            }  
+            .right.ng-hide-remove {
+                transition: all ease-in-out 0.8s;
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            .right.ng-hide-remove.ng-hide-remove-active {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            
+            #leftPanel {
+/*                transition: all ease-in-out 1s;*/
+            }
+            #rightPanel {
+/*                transition: all ease-in-out 1s;*/
+            }  
+            #news0, #news1, #news2, #news3, #news4 {
+                display: none
+            }
+            .gold {
+                color: gold
+            }
+            #tess {
+                color:red
+            }
+            
+            #infoProg {
+                display: block
+            }
+            #chartProg {
+                display: block
+            }
+            #hisProg {
+                display: block
+            }            
+            #newsProg {
+                display: block
+            }
+            
+            
+            #hisChart {
+                display: none
+            }
+            #tableBody {
+                display: none
+            }
+            #newsFeeds {
+                display: none
+			}
+            
+            #hisErr, #infoErr, #chartErr, #newsErr {
+                display: none
+            }
+            
+            #passData {
+                color:white;
+                display: none
+            }
+            
+		</style>
+	</head>
+	<body id="mainControl" ng-controller="myController as ctrl" >
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '694434704095367',
+              cookie     : true,
+              xfbml      : true,
+              version    : 'v2.8'
+            });
+
+            FB.AppEvents.logPageView();   
+
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "https://connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        </script>
+		<div class="container">
+			<br>
+			<div id="searchArea" class="row">
+				<div class="col" style="text-align: center; font-size: 150%">
+					<br><b> Stock Market Search </b>
+                    
+				</div>
+				<br>
+				<div class="row" id="searchBar">
+                    <span class="form-horizontal">
+                        <div class="col-sm-3 ">
+                            <span class="col">Enter Stock Ticker Symbol: </span><span style="color: red"> *</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <form id="tickerSymbol" ng-submit="$event.preventDefault()" >
+                                <md-autocomplete
+                                        md-input-name = "ctrl.autocomplete"
+                                        md-selected-item="ctrl.selectedItem"
+                                        md-selected-item-change="selectedItemChange(item)"
+                                        md-search-text="ctrl.searchText"
+                                        md-search-text-change="searchTextChange(ctrl.searchText)"
+                                        md-items="item in querySearch(ctrl.searchText)"
+                                        md-item-text="item.Symbol"
+                                        md-min-length="0"
+                                        placeholder="e.g. AAPL">
+                                    <md-item-template>
+                                        {{item.Symbol + " - " + item.Name + " (" + item.Exchange + ")"}}
+                                    </md-item-template>
+                                </md-autocomplete>
+                            </form>
+                            <div id="promptText">
+                                Please enter a stock ticker symbol
+                            </div>
+                        </div>
+                    </span>
+                    <span class="col-md-3 ">
+                        
+                        <button class="btn btn-primary disabled" type="button" ng-click="toRightMod()"  id="getQuoteButton">
+                        <span class="glyphicon glyphicon-search"></span>Get Quote
+                        </button>
+                        <button  id="clearButton" ng-click="clear()" class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-refresh" ></span> Clear
+                        </button>
+                    </span>
+				</div>
+				<br>
+			</div>
+            <hr>
+		</div>
+		
+        <div id="passData"> </div>
+		<div class="container" id="infoPanels">
+			<br>
+			<div id="leftPanel" class="panel panel-default left" ng-show="!rightShow">
+				<div class="panel-heading clearfix">
+					<span><b>Favorite List  </b> </span>
+					<span class="pull-right ">
+				        <span class="hidden-xs">Automatic Refersh:</span>
+                        &nbsp; &nbsp; &nbsp; 
+                        
+                        <input id="toggle" type="checkbox" data-toggle="toggle" >
+                        
+                        &nbsp;<button id="refreshBtn" ng-click="refresh()" type="button" class="btn btn-default"> <span class="glyphicon glyphicon-refresh"></span></button>
+                        <button id="toRight" ng-click=" toRight()" type="button" class="btn btn-default" disabled><span class="glyphicon glyphicon-chevron-right"></span></button>
+					</span>
+				</div>
+				<div class="panel-body">
+					<div class="row" style="padding:20px;">
+						<div class="form-inline">
+							<div class="form-group col">
+								<b>Sort by</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<select id="sortSelection" class="form-control form-control-sm" ng-model="selectedOption" ng-change="changeSort()">
+                                    <option ng-repeat="sortOption in sortOptions"> {{sortOption}} </option>
+								</select>
+							</div>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<div class="form-group col">
+								<b>Order</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <select disabled id="orderSelection" class="form-control form-control-sm" ng-model="selectedOrder" ng-change="changeOrder()">
+                                    <option ng-repeat="orderOption in orderOptions">{{orderOption}}</option>
+                                </select>
+							</div>
+						</div>
+					</div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="favTable">
+                                <tr >
+                                    <th ><b>Symbol</b>
+                                    </th>
+                                    <th ><b>Stock Price</b>
+                                    </th>
+                                    <th ><b>Change (Change Percent)</b>
+                                    </th>
+                                    <th> <b>Volume</b>
+                                    </th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                <tr ng-repeat="localStock in localStocks | orderBy:sortType:sortReverse">
+                                    <td><a style="cursor: pointer;" ng-click="execute(localStock.Symbol)"> {{ localStock.Symbol }}</a></td>
+                                    <td>{{ localStock.StockPrice }}</td>
+                                    <td id="percentText" ng-style="set_color(localStock)">{{ localStock.Change}} ({{ localStock.ChangePercent}}%) <img ng-if="localStock.Change > 0" style='width:15px; height:15px' src="http://cs-server.usc.edu:45678/hw/hw8/images/Up.png"> <img ng-if="localStock.Change <= 0" style='width:15px; height:15px' src="http://cs-server.usc.edu:45678/hw/hw8/images/Down.png"> </td>
+                                    <td>{{ localStock.Volume | number }}</td>
+                                    <td> <button class="btn btn-default" ng-click="removeRow($index);removeStorage(localStock.Symbol)"><span class='glyphicon glyphicon-trash'></span></button> </td>
+                                </tr>
+
+                        </table>
+                    </div>
+				</div>
+			</div>
+			<div id="rightPanel" class="panel panel-default right" ng-show="rightShow">
+				<div class="panel-heading clearfix">  
+                    <button id="toLeft" ng-click="toLeft()" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button> <span style="margin-left: 40%"> <b>Stock Details</b></span>
+                </div>
+				<div class="panel-body">
+					<div class="row">
+						<ul id = "stockDetailUl" style="padding-left: 15px" class="nav nav-pills">
+							<li id="curStockClass" class="active" ><a id="currStockBtn" data-toggle="pill" ><span class="glyphicon glyphicon-dashboard"></span>&nbsp; <span class="hidden-sm hidden-xs">Current</span> Stock</a></li>
+                            <li id="hisChartClass" class="" ><a id="hisChartsBtn" data-toggle="pill" ><span class="glyphicon glyphicon-signal"></span>&nbsp; <span class="hidden-sm hidden-xs">Historical</span> Charts</a></li>
+                            <li id="newsFeedsClass" class="" ><a id="newsFeedsBtn" data-toggle="pill" ><span class="glyphicon glyphicon-link"></span>&nbsp;News <span class="hidden-sm hidden-xs"> Feeds</span></a></li>
+						</ul>
+						<hr>
+						<div id="currStock">
+							<span class = "col-lg-5" >
+								<b>Stock Details</b>
+								<div class="pull-right">
+									<button disabled id="favBtn" ng-click="clickFav()" type="button" class="btn btn-default"><span id="favBtnIcon" class="glyphicon glyphicon-star-empty"></span></button>
+									<button disabled id="fbBtn" ng-click="clickFb()" type="button" class="btn btn-default"><img width="20px" height="20px" src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png"></button>
+								</div>
+								<br><br><br>
+                                <div id="infoProg" class="progress">
+                                    <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                                </div>
+                                <div id="infoErr" class="alert alert-danger">
+                                    Error! Failed to get current stock data.
+                                </div>
+                                <div id="infoTable">
+                                    <table class="table table-striped" id="tableBody">
+                                        <tr>
+                                            <td><b>Stock Ticker Symbol</b></td>
+                                            <td id="row1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Last Price</b></td>
+                                            <td id="row2"></td>
+                                        </tr>
+                                        <tr >
+                                            <td><b>Change (Change Percent)</b></td>
+                                            <td id="row3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>TimeStamp</b></td>
+                                            <td id="row4"></td>
+                                        </tr>
+                                        <tr >
+                                            <td><b>Open</b></td>
+                                            <td id="row5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Close</b></td>
+                                            <td id="row6"></td>
+                                        </tr>
+                                        <tr >
+                                            <td><b>Day's Range</b></td>
+                                            <td id="row7"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Volume</b></td>
+                                            <td id="row8"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+							</span>
+							<span class = "col-lg-7">
+								<div>
+									<ul style="padding-left: 15px" class="nav nav-tabs">
+										<li id="priceClass" class="active"><a data-toggle="tab" id="priceTab">Price</a></li>
+										<li id="smaClass" ><a data-toggle="tab" id="smaTab">SMA</a></li>
+										<li id="emaClass" ><a data-toggle="tab" id="emaTab">EMA</a></li>
+										<li id="stochClass" ><a data-toggle="tab" id="stochTab">STOCH</a></li>
+										<li id="rsiClass" ><a data-toggle="tab" id="rsiTab">RSI</a></li>
+										<li id="adxClass" ><a data-toggle="tab" id="adxTab">ADX</a></li>
+										<li id="cciClass" ><a data-toggle="tab" id="cciTab">CCI</a></li>
+										<li id="bbandsClass" ><a data-toggle="tab" id="bbandsTab">BBANDS</a></li>
+										<li id="macdClass" ><a data-toggle="tab" id="macdTab">MACD</a></li>
+									</ul>
+								</div>
+                                <div id="chartProg" >
+                                    <br>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="chartErr">
+                                    <br>
+                                    <div id="chartErrText" class="alert alert-danger">
+                                        Error! Failed to get current stock data.
+                                    </div>
+                                </div>
+								<div id="chartContainer"></div>
+							</span>
+						</div>
+                        
+                        
+                        <div id = "history">
+                            <div id="hisProg" class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                            </div>
+                            <div id="hisErr" class="alert alert-danger">
+                                    Error! Failed to get historical charts data.
+                            </div>
+                            <div id="stockContainer"></div>
+                        </div>
+                        
+                        
+                        <div id = "newsList">
+                            <div id="newsProg" class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                            </div>
+                            <div id="newsErr" class="alert alert-danger">
+                                    Error! Failed to get news feed data.
+                            </div>
+                            <div id="newsFeeds">
+                                <div class="well" id="news0"> </div>
+                                <div class="well" id="news1"> </div>
+                                <div class="well" id="news2"> </div>
+                                <div class="well" id="news3"> </div>
+                                <div class="well" id="news4"> </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
