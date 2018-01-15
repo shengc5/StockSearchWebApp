@@ -1,2 +1,2 @@
 # StockSearchWebApp
-See demo at http://csci571-hw8-183922.appspot.com/
+See demo at https://spa-stock-market-search.herokuapp.com/
