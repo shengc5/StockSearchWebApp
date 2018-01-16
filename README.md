@@ -1,5 +1,5 @@
 # StockSearchWebApp
-by Sheng Chen
+
 This is a single page application(SPA) I created to help people who are active in the stock market game to keep track of the stocks they are interested in. 
 
 It can serve as a standalone utility(much like macOS's dashboard applications) for user to quickly look up trade info or news about their stocks.
