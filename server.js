@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.use(express.static("./"));
+app.use(express.static("./public"));
 
 app.use(cors());
 
@@ -246,8 +246,8 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
-
-app.listen(3000);
+const port = process.env.PORT || 3000;
+app.listen(port);
 
 console.log("Express app running on port 3000");
 

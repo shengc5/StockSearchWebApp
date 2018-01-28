@@ -298,7 +298,7 @@ $("document").ready( function() {
     var promptText = angular.element( document.querySelector( '#promptText' ) );
     var getQuoteButton = angular.element( document.querySelector( '#getQuoteButton' ) );
 
-    
+    $('[data-toggle="tooltip"]').tooltip(); 
 
 
     $("#input-0").on("input", function() { 
